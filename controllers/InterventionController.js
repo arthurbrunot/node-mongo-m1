@@ -95,16 +95,14 @@ exports.addIntervention = [
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
 			}
 			else {
-				//Save intervention.
-				intervention.save(function (err) {
+				intervention.save(function (err, intervention) {
+					Client.findByIdAndUpdate(intervention.client, {$push: {interventions: intervention._id}}, {new: true}, function(err){
+						if(err){
+							return apiResponse.ErrorResponse(res, err);
+						}
+						return apiResponse.successResponseWithData(res, "Operation success", intervention);
+					});
 					if (err) { return apiResponse.ErrorResponse(res, err); }
-
-					const client = Client.findById({_id: req.body.client});
-					client.interventions.push(intervention);
-					client.save();
-
-					let interventionData = new InterventionData(intervention);
-					return apiResponse.successResponseWithData(res,"Intervention add Success.", interventionData);
 				});
 			}
 		} catch (err) {

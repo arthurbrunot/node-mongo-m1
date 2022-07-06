@@ -1,15 +1,5 @@
 const Client = require("../models/ClientModel");
 const apiResponse = require("../helpers/customApiResponses");
-const { response } = require("express");
-
-function ClientData(data) {
-	this.id = data._id;
-	this.firstName = data.firstName;
-	this.lastName= data.lastName;
-	this.email = data.email;
-	this.phone = data.phone;
-	this.address = data.address;
-}
 
 exports.getClients = async function (query) {
 
@@ -23,7 +13,7 @@ exports.getClients = async function (query) {
 
 exports.getClientById = async function (query) {
 	try {
-		return await Client.findById(query);
+		return await Client.findById(query).populate("interventions", "label date agent", "Intervention");
 	} catch (e) {
 		// Log Errors
 		throw Error("Error while Paginating Clients");

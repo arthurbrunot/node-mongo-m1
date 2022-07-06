@@ -14,6 +14,7 @@ function ClientData(data) {
 	this.email = data.email;
 	this.phone = data.phone;
 	this.address = data.address;
+	this.evaluations = data.evaluations;
 }
 
 /**
@@ -54,8 +55,7 @@ exports.clientDetail = [
 		try {
 			ClientService.getClientById({_id: req.params.id}).then((client)=>{
 				if(client !== null){
-					let clientData = new ClientData(client);
-					return apiResponse.successResponseWithData(res, "Operation success", clientData);
+					return apiResponse.successResponseWithData(res, "Operation success", client);
 				}else{
 					return apiResponse.successResponseWithData(res, "Operation success", {});
 				}
