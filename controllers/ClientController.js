@@ -4,28 +4,14 @@ const { body,validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 const apiResponse = require("../helpers/customApiResponses");
 const mongoose = require("mongoose");
+const authenticate = require("../middlewares/jwt");
 mongoose.set("useFindAndModify", false);
 
-// Client Schema
-function ClientData(data) {
-	this.id = data._id;
-	this.firstName = data.firstName;
-	this.lastName= data.lastName;
-	this.email = data.email;
-	this.phone = data.phone;
-	this.address = data.address;
-	this.evaluations = data.evaluations;
-}
-
-/**
- * Client List.
- * 
- * @returns {Object}
- */
 exports.clientList = [
+	authenticate,
 	function (req, res) {
 		try {
-			// Client.find({},"_id title description isbn createdAt").then((clients)=>{
+			// CLIENT LIST
 			ClientService.getClients({}).then((clients)=>{
 				if(clients.length > 0){
 					return apiResponse.successResponseWithData(res, "Operation success", clients);
@@ -34,25 +20,19 @@ exports.clientList = [
 				}
 			});
 		} catch (err) {
-			//throw error in json response with status 500. 
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
 ];
 
-/**
- * Client Detail.
- * 
- * @param {string}      id
- * 
- * @returns {Object}
- */
 exports.clientDetail = [
+	authenticate,
 	function (req, res) {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 			return apiResponse.successResponseWithData(res, "Operation success", {});
 		}
 		try {
+			// GET CLIENT BY ID
 			ClientService.getClientById({_id: req.params.id}).then((client)=>{
 				if(client !== null){
 					return apiResponse.successResponseWithData(res, "Operation success", client);
@@ -61,24 +41,13 @@ exports.clientDetail = [
 				}
 			});
 		} catch (err) {
-			//throw error in json response with status 500. 
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
 ];
 
-/**
- * Client store.
- * 
- * @param {string}      firstName
- * @param {string}      lastName
- * @param {string}      email
- * @param {string}      address
- * @param {number}      phone
- *
- * @returns {Object}
- */
 exports.addClient = [
+	authenticate,
 	body("firstName", "First name must not be empty.").isLength({ min: 1 }).trim(),
 	body("lastName", "Last name must not be empty.").isLength({ min: 1 }).trim(),
 	body("address", "Address must not be empty.").isLength({ min: 1 }).trim(),
@@ -98,29 +67,21 @@ exports.addClient = [
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
 			}
 			else {
-				//Save client.
+
+
+				// ADD CLIENT
 				ClientService.addClient(req, res).then((client) => {
-					let clientData = new ClientData(client);
-					return apiResponse.successResponseWithData(res,"Client add Success.", clientData);
+					return apiResponse.successResponseWithData(res,"Client add Success.", client);
 				});
 			}
 		} catch (err) {
-			//throw error in json response with status 500. 
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
 ];
 
-/**
- * Client update.
- * 
- * @param {string}      title 
- * @param {string}      description
- * @param {string}      isbn
- * 
- * @returns {Object}
- */
 exports.updateClient = [
+	authenticate,
 	body("firstName", "First name must not be empty.").isLength({ min: 1 }).trim(),
 	body("lastName", "Last name must not be empty.").isLength({ min: 1 }).trim(),
 	body("address", "Address must not be empty.").isLength({ min: 1 }).trim(),
@@ -130,13 +91,6 @@ exports.updateClient = [
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
-			var client = { 
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-				email: req.body.email,
-				address: req.body.address,
-				phone: req.body.phone
-			};
 
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
@@ -145,55 +99,32 @@ exports.updateClient = [
 				if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 					return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
 				}else{
-					Client.findById(req.params.id, function (err, foundClient) {
-						if(foundClient === null){
-							return apiResponse.notFoundResponse(res,"Client not exists with this id");
-						}else{
-							//update client.
-							Client.findByIdAndUpdate(req.params.id, client, {},function (err) {
-								if (err) { 
-									return apiResponse.ErrorResponse(res, err); 
-								}else{
-									let clientData = new ClientData(client);
-									return apiResponse.successResponseWithData(res,"Client update Success.", clientData);
-								}
-							});
-						}
+					//UPDATE CLIENT
+					ClientService.updateClient(req, res).then((client) => {
+						console.log(client);
+						return apiResponse.successResponseWithData(res,"Client update Success.", client);
 					});
 				}
 			}
 		} catch (err) {
-			//throw error in json response with status 500. 
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
 ];
 
-/**
- * Client Delete.
- * 
- * @param {string} id
- * 
- * @returns {Object}
- */
 exports.deleteClient = [
+	authenticate,
 	function (req, res) {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 			return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
 		}
 		try {
-			Client.findById(req.params.id, function (err, foundClient) {
-				if(foundClient === null){
-					return apiResponse.notFoundResponse(res,"Client not exists with this id");
+			//DELETE CLIENT
+			ClientService.deleteClient(req, res).then((err) => {
+				if (err) { 
+					return apiResponse.ErrorResponse(res, err); 
 				}else{
-					//delete client.
-					Client.findByIdAndRemove(req.params.id,function (err) {
-						if (err) { 
-							return apiResponse.ErrorResponse(res, err); 
-						}else{
-							return apiResponse.successResponse(res,"Client delete Success.");
-						}
-					});
+					return apiResponse.successResponse(res,"Client delete Success.");
 				}
 			});
 		} catch (err) {

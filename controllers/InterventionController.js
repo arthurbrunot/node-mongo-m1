@@ -1,9 +1,11 @@
 const Intervention = require("../models/InterventionModel");
-const Client = require("../models/ClientModel");
 const { body,validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 const apiResponse = require("../helpers/customApiResponses");
 const mongoose = require("mongoose");
+const authenticate = require("../middlewares/jwt");
+const InterventionService = require("../services/InterventionService");
+const ClientService = require("../services/ClientService");
 mongoose.set("useFindAndModify", false);
 
 // Intervention Schema
@@ -15,16 +17,11 @@ function InterventionData(data) {
 	this.client = data.client;
 }
 
-/**
- * Intervention List.
- * 
- * @returns {Object}
- */
 exports.interventionList = [
+	authenticate,
 	function (req, res) {
 		try {
-			// Intervention.find({},"_id title description isbn createdAt").then((interventions)=>{
-			Intervention.find().then((interventions)=>{
+			InterventionService.getInterventions().then((interventions)=>{
 				if(interventions.length > 0){
 					return apiResponse.successResponseWithData(res, "Operation success", interventions);
 				}else{
@@ -32,26 +29,36 @@ exports.interventionList = [
 				}
 			});
 		} catch (err) {
-			//throw error in json response with status 500. 
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
 ];
 
-/**
- * Intervention Detail.
- * 
- * @param {string}      id
- * 
- * @returns {Object}
- */
+exports.interventionsForClient = [
+	authenticate,
+	function (req, res) {
+		try {
+			InterventionService.getInterventionsForClient(req).then((clients)=>{
+				if(clients.length > 0){
+					return apiResponse.successResponseWithData(res, "Operation success", clients);
+				}else{
+					return apiResponse.successResponseWithData(res, "Operation success", []);
+				}
+			});
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
 exports.interventionDetail = [
+	authenticate,
 	function (req, res) {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 			return apiResponse.successResponseWithData(res, "Operation success", {});
 		}
 		try {
-			Intervention.findOne({_id: req.params.id}).then((intervention)=>{
+			InterventionService.getInterventionById({_id: req.params.id}).then((intervention)=>{
 				if(intervention !== null){
 					let interventionData = new InterventionData(intervention);
 					return apiResponse.successResponseWithData(res, "Operation success", interventionData);
@@ -60,22 +67,13 @@ exports.interventionDetail = [
 				}
 			});
 		} catch (err) {
-			//throw error in json response with status 500. 
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
 ];
 
-/**
- * Intervention store.
- * 
- * @param {date}      date
- * @param {string}      label
- * @param {string}      agent
- *
- * @returns {Object}
- */
 exports.addIntervention = [
+	authenticate,
 	body("date", "date must not be empty.").isLength({ min: 1 }).trim(),
 	body("label", "Last name must not be empty.").isLength({ min: 1 }).trim(),
 	body("agent", "Address must not be empty.").isLength({ min: 1 }).trim(),
@@ -96,7 +94,7 @@ exports.addIntervention = [
 			}
 			else {
 				intervention.save(function (err, intervention) {
-					Client.findByIdAndUpdate(intervention.client, {$push: {interventions: intervention._id}}, {new: true}, function(err){
+					ClientService.addInterventionForClient(req,res,intervention.client, {$push: {interventions: intervention._id}}).then((err)=>{
 						if(err){
 							return apiResponse.ErrorResponse(res, err);
 						}
@@ -106,38 +104,20 @@ exports.addIntervention = [
 				});
 			}
 		} catch (err) {
-			//throw error in json response with status 500. 
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
 ];
 
-/**
- * Intervention update.
- * 
- * @param {string}      title 
- * @param {string}      description
- * @param {string}      isbn
- * 
- * @returns {Object}
- */
 exports.updateIntervention = [
-	body("firstName", "First name must not be empty.").isLength({ min: 1 }).trim(),
-	body("lastName", "Last name must not be empty.").isLength({ min: 1 }).trim(),
-	body("address", "Address must not be empty.").isLength({ min: 1 }).trim(),
-	body("phone", "Address must be valid.").isLength({ min: 10 }).trim(),
-	body("email", "Email must not be empty.").isLength({ min: 1 }).trim(),
+	authenticate,
+	body("date", "date must not be empty.").isLength({ min: 1 }).trim(),
+	body("label", "Last name must not be empty.").isLength({ min: 1 }).trim(),
+	body("agent", "Address must not be empty.").isLength({ min: 1 }).trim(),
 	sanitizeBody("*").escape(),
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
-			var intervention = {
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-				email: req.body.email,
-				address: req.body.address,
-				phone: req.body.phone
-			};
 
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
@@ -146,55 +126,30 @@ exports.updateIntervention = [
 				if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 					return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
 				}else{
-					Intervention.findById(req.params.id, function (err, foundIntervention) {
-						if(foundIntervention === null){
-							return apiResponse.notFoundResponse(res,"Intervention not exists with this id");
-						}else{
-							//update intervention.
-							Intervention.findByIdAndUpdate(req.params.id, intervention, {},function (err) {
-								if (err) { 
-									return apiResponse.ErrorResponse(res, err); 
-								}else{
-									let interventionData = new InterventionData(intervention);
-									return apiResponse.successResponseWithData(res,"Intervention update Success.", interventionData);
-								}
-							});
-						}
+					InterventionService.updateIntervention(req, res).then((intervention) => {
+						return apiResponse.successResponseWithData(res,"Client update Success.", intervention);
 					});
 				}
 			}
 		} catch (err) {
-			//throw error in json response with status 500. 
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
 ];
 
-/**
- * Intervention Delete.
- * 
- * @param {string} id
- * 
- * @returns {Object}
- */
 exports.deleteIntervention = [
+	authenticate,
 	function (req, res) {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 			return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
 		}
 		try {
-			Intervention.findById(req.params.id, function (err, foundIntervention) {
-				if(foundIntervention === null){
-					return apiResponse.notFoundResponse(res,"Intervention not exists with this id");
+			//DELETE CLIENT
+			InterventionService.deleteIntervention(req, res).then((err) => {
+				if (err) {
+					return apiResponse.ErrorResponse(res, err);
 				}else{
-					//delete intervention.
-					Intervention.findByIdAndRemove(req.params.id,function (err) {
-						if (err) { 
-							return apiResponse.ErrorResponse(res, err); 
-						}else{
-							return apiResponse.successResponse(res,"Intervention delete Success.");
-						}
-					});
+					return apiResponse.successResponse(res,"Intervention delete Success.");
 				}
 			});
 		} catch (err) {

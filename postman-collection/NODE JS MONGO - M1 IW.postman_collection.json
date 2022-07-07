@@ -1,0 +1,549 @@
+{
+	"info": {
+		"_postman_id": "01b64651-de5b-4db8-865c-f4eccaa91157",
+		"name": "NODE JS MONGO - M1 IW",
+		"description": "A boilerplate for REST API Development with Node.js and Expressjs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19947551"
+	},
+	"item": [
+		{
+			"name": "Clients",
+			"item": [
+				{
+					"name": "Client Store",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "firstName",
+									"value": "Arthur",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Brunot",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "test@test.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "0676379184",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "119 rue de sèze, 69006 Lyon",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/client",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"client"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Client Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "firstName",
+									"value": "JOHN",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "Brunot",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "arthur.brunot.pro@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "0676379184",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "119 rue de sèze, 69006 Lyon",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/client/62c56bae0d7a8c4ca395f3b1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"client",
+								"62c56bae0d7a8c4ca395f3b1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Client List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer ",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/client",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"client"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Client Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/client/62c6d4e461e8927f2e459706",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"client",
+								"62c6d4e461e8927f2e459706"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Client Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/client/62c53e533f057540a2614a69",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"client",
+								"62c53e533f057540a2614a69"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Interventions",
+			"item": [
+				{
+					"name": "Intervention Store",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "date",
+									"value": "2000-12-01 12:00",
+									"type": "text"
+								},
+								{
+									"key": "label",
+									"value": "Testsdfsfsdsdf",
+									"type": "text"
+								},
+								{
+									"key": "agent",
+									"value": "Test",
+									"type": "text"
+								},
+								{
+									"key": "client",
+									"value": "62c6d4e461e8927f2e459706",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/intervention/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"intervention",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Intervention Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "date",
+									"value": "2000-12-01 12:00",
+									"type": "text"
+								},
+								{
+									"key": "label",
+									"value": "Test1",
+									"type": "text"
+								},
+								{
+									"key": "agent",
+									"value": "Test",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/intervention/62c6b52daa321b7732726f9d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"intervention",
+								"62c6b52daa321b7732726f9d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Intervention List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQwMzc0ODllY2I2ZDUyNjAzZDQ1ZjMiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0QHRlc3RpbmcuY29tIiwiaWF0IjoxNTY0NzQ0NzQ4LCJleHAiOjE1NjQ3NTE5NDh9.gE2DjhWgNmPFyy7K21MEC4bIm3gbbDicdE_eorFIZ0o",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/intervention",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"intervention"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Interventions for Client",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQwMzc0ODllY2I2ZDUyNjAzZDQ1ZjMiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0QHRlc3RpbmcuY29tIiwiaWF0IjoxNTY0NzQ0NzQ4LCJleHAiOjE1NjQ3NTE5NDh9.gE2DjhWgNmPFyy7K21MEC4bIm3gbbDicdE_eorFIZ0o",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/intervention/client/62c6d4e461e8927f2e459706",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"intervention",
+								"client",
+								"62c6d4e461e8927f2e459706"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Intervention Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/intervention/62c6d0a6f051ff7de3ba581f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"intervention",
+								"62c6d0a6f051ff7de3ba581f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Intervention Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDQwMzc0ODllY2I2ZDUyNjAzZDQ1ZjMiLCJmaXJzdE5hbWUiOiJ0ZXN0IiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0QHRlc3RpbmcuY29tIiwiaWF0IjoxNTY1MDAxNzQ3LCJleHAiOjE1NjUwMDg5NDd9.NFq5JjFI4nEU7_1oAt2Zj91q0vRSdd3d5to-T_7aRJ4",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/intervention/62c6d50461e8927f2e459708",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"intervention",
+								"62c6d50461e8927f2e459708"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "firstName",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmM2ODg3ODRlOTMzMDZhMDFiYjIyMTkiLCJmaXJzdE5hbWUiOiJBcnRodXIiLCJsYXN0TmFtZSI6IkJydW5vdCIsImVtYWlsIjoiYXJ0aHVyLmJydW5vdC5wcm9AZ21haWwuY29tIiwiaWF0IjoxNjU3MTk0MDYxLCJleHAiOjE2NTcyMzAwNjF9.EH7sjcKBHLvrO0bWOeVYxpATtFzaITUecj9xTYtjJD8",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
