@@ -53,6 +53,8 @@ ESlint est installé pour rendre le code plus propre. Pour fix le code déjà pr
 ## Swagger
 Swagger est configuré pour l'api à l'adresse `http://localhost:3000/api-docs/`
 
+Je n'ai malheureusement pas eu le temps d'intégrer les routes dedans
+
 ## Technologies
 Les technologies utilisées sont les suivantes :
 
